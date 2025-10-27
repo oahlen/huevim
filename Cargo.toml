@@ -5,6 +5,8 @@ edition = "2024"
 license = "MIT"
 description = "Neovim lua color scheme generator written in Rust."
 homepage = "https://github.com/oahlen/huey"
+categories = ["command-line-utilities"]
+keywords = ["neovim", "nvim", "colorscheme"]
 
 [dependencies]
 anyhow = "1.0.100"
