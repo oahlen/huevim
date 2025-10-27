@@ -8,22 +8,13 @@ use std::{
 use clap::Parser;
 use format::{Background, Theme};
 
+use crate::args::Args;
+
+mod args;
 mod color;
 mod error;
 mod format;
 mod highlight;
-
-#[derive(Debug, Parser)]
-#[clap(author, version, about)]
-pub struct Args {
-    /// The input colorscheme file
-    pub filename: String,
-    /// Directory of generated colorscheme, default to the current working directory
-    pub output: Option<String>,
-    /// Overwrite the init.lua file if it already exists
-    #[clap(long)]
-    pub overwrite_init: bool,
-}
 
 fn main() -> Result<(), anyhow::Error> {
     let args: Args = Args::parse();
