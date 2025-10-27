@@ -18,19 +18,13 @@ cargo build
 cargo install --path .
 ```
 
-The project also comes with a nix flake which provides an appropriate development environment and build hook. Experience
-with nix and a flake enabled nix installation are of course required for this option.
+The project also comes with a nix shell which provides an appropriate development environment and build hook. Experience
+with nix is of course required for this option.
 
 Enter dev shell:
 
 ```bash
-nix develop
-```
-
-Build the default huey nix package:
-
-```bash
-nix build
+nix-shell
 ```
 
 ## Basic usage
