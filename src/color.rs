@@ -1,5 +1,5 @@
 use regex::Regex;
-use std::fmt;
+use std::{fmt, sync::OnceLock};
 
 use crate::error::{HslColorError, RgbColorError};
 
@@ -233,16 +233,16 @@ impl RgbColor {
     }
 
     pub(crate) fn parse_from_hex(hex: &str) -> Result<RgbColor, anyhow::Error> {
-        lazy_static! {
-            static ref RE: Regex =
-                Regex::new(r"^#([a-fA-F\d]{6})$").expect("Hex format regex is invalid");
-        }
+        static RE: OnceLock<Regex> = OnceLock::new();
 
         fn extract(slice: &str) -> Result<u8, anyhow::Error> {
             Ok(i64::from_str_radix(slice, 16)? as u8)
         }
 
-        match RE.captures(hex) {
+        match RE
+            .get_or_init(|| Regex::new(r"^#([a-fA-F\d]{6})$").expect("Hex format regex is invalid"))
+            .captures(hex)
+        {
             Some(capture) => Ok(RgbColor::new(
                 extract(&capture[1][0..2])?,
                 extract(&capture[1][2..4])?,

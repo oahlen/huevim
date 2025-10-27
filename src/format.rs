@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt::Display, fs, path::Path};
+use std::{collections::HashMap, fmt::Display, fs, path::Path, sync::OnceLock};
 
 use indexmap::IndexMap;
 use regex::Regex;
@@ -6,7 +6,7 @@ use serde::Deserialize;
 use toml::Table;
 
 use crate::{
-    color::{mix, Color, HslColor, RgbColor},
+    color::{Color, HslColor, RgbColor, mix},
     error::{FileError, ThemeError},
     highlight::parse_highlight,
 };
@@ -120,16 +120,19 @@ fn parse_palette_entry(
     palette: &IndexMap<String, Box<dyn Color>>,
     hues: &Option<HashMap<String, f32>>,
 ) -> Result<Box<dyn Color>, anyhow::Error> {
-    lazy_static! {
-        static ref RE: Regex = Regex::new(r"^(?i)(hsl|adjust|lighten|darken|mix)\((.*)\)$")
-            .expect("Color format regex is invalid");
-    }
+    static RE: OnceLock<Regex> = OnceLock::new();
 
     if value.starts_with('#') {
         return Ok(Box::new(RgbColor::parse_from_hex(value)?));
     }
 
-    match RE.captures(value) {
+    match RE
+        .get_or_init(|| {
+            Regex::new(r"^(?i)(hsl|adjust|lighten|darken|mix)\((.*)\)$")
+                .expect("Color format regex is invalid")
+        })
+        .captures(value)
+    {
         Some(capture) => match capture[1].to_lowercase().as_str() {
             "hsl" => Ok(Box::new(parse_hsl_color(
                 split_input(&capture[2], 3)?,

@@ -77,7 +77,7 @@ fn parse_style_options(style: &str) -> Result<String, ThemeError> {
             unknown => {
                 return Err(ThemeError::UnknownStyleOption {
                     option: unknown.to_string(),
-                })
+                });
             }
         }
     }
