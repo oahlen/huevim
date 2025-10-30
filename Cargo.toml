@@ -1,10 +1,10 @@
 [package]
-name = "huey"
-version = "0.4.0"
+name = "huevim"
+version = "0.5.0"
 edition = "2024"
 license = "MIT"
 description = "Neovim lua color scheme generator written in Rust."
-homepage = "https://github.com/oahlen/huey"
+homepage = "https://github.com/oahlen/huevim"
 categories = ["command-line-utilities"]
 keywords = ["neovim", "nvim", "colorscheme"]
 

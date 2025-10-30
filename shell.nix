@@ -2,7 +2,7 @@
   pkgs ? import <nixpkgs> { },
 }:
 pkgs.mkShell {
-  NIX_SHELL = "Huey";
+  NIX_SHELL = "HueVim";
 
   RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
 

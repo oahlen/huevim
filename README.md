@@ -1,8 +1,10 @@
-# Huey
+# HueVim
+
+> Formerly known as **huey**
 
 Neovim lua color scheme generator written in Rust.
 
-Huey makes it easy to create a minimal lua based neovim colorscheme with
+HueVim makes it easy to create a minimal lua based neovim colorscheme with
 [HSL](https://en.wikipedia.org/wiki/HSL_and_HSV) based color generation.
 
 The project takes inspiration from [colorgen-nvim](https://github.com/LunarVim/colorgen-nvim) and borrows some of the
@@ -33,7 +35,7 @@ The program requires a theme file and an optional positional argument for the ou
 The following command generates a theme in the current working directory:
 
 ```bash
-huey /path/to/my/awesome/theme.toml .
+huevim /path/to/my/awesome/theme.toml .
 ```
 
 ## File format
