@@ -5,7 +5,6 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use clap::Parser;
 use format::{Background, Theme};
 
 use crate::args::Args;
@@ -17,7 +16,7 @@ mod format;
 mod highlight;
 
 fn main() -> Result<(), anyhow::Error> {
-    let args: Args = Args::parse();
+    let args: Args = Args::parse()?;
 
     let output = get_root_dir(args.output)?;
     let theme = format::parse_theme(&args.filename)?;
@@ -37,10 +36,7 @@ fn main() -> Result<(), anyhow::Error> {
 fn get_root_dir(output: Option<String>) -> Result<String, anyhow::Error> {
     Ok(match output {
         Some(root) => PathBuf::from(root),
-        None => match env::current_dir() {
-            Ok(output) => output,
-            Err(error) => return Err(error.into()),
-        },
+        None => env::current_dir()?,
     }
     .display()
     .to_string())
