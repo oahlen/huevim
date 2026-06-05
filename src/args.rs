@@ -7,6 +7,7 @@ pub struct Args {
     pub filename: String,
     pub output: Option<String>,
     pub overwrite_init: bool,
+    pub generate_manifest: bool,
 }
 
 impl Args {
@@ -14,6 +15,7 @@ impl Args {
         let mut filename: Option<String> = None;
         let mut output: Option<String> = None;
         let mut overwrite_init = false;
+        let mut generate_manifest = false;
 
         let mut parser = lexopt::Parser::from_env();
         while let Some(arg) = parser.next()? {
@@ -26,6 +28,9 @@ impl Args {
                 }
                 Long("overwrite-init") => {
                     overwrite_init = true;
+                }
+                Long("generate-manifest") => {
+                    generate_manifest = true;
                 }
                 Short('h') | Long("help") => {
                     print_help();
@@ -43,6 +48,7 @@ impl Args {
             filename: filename.ok_or("Missing argument <FILENAME>")?,
             output,
             overwrite_init,
+            generate_manifest,
         })
     }
 }
@@ -59,7 +65,10 @@ fn print_help() {
     );
     println!();
     println!("Options:");
-    println!("      --overwrite-init  Overwrite the init.lua file if it already exists.");
-    println!("  -h, --help            Print help information.");
-    println!("  -V, --version         Print version information.");
+    println!("      --overwrite-init     Overwrite the init.lua file if it already exists.");
+    println!(
+        "      --generate-manifest  Generate a color palette manifest file in the output directory."
+    );
+    println!("  -h, --help               Print help information.");
+    println!("  -V, --version            Print version information.");
 }

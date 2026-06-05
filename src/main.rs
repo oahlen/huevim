@@ -28,7 +28,11 @@ fn main() -> Result<(), anyhow::Error> {
 
     generate_palette_file(&output, &theme)?;
     generate_highlights_file(&output, &theme)?;
-    generate_init(&output, theme, args.overwrite_init)?;
+    generate_init(&output, &theme, args.overwrite_init)?;
+
+    if args.generate_manifest {
+        generate_palette_json_file(&output, &theme)?;
+    }
 
     Ok(())
 }
@@ -106,6 +110,26 @@ return {
     Ok(())
 }
 
+fn generate_palette_json_file(output: &str, theme: &Theme) -> Result<(), anyhow::Error> {
+    let name = &theme.name;
+    let background = &theme.background;
+
+    let file = File::create(format!("{output}/{name}-{background}-palette.json"))?;
+    let mut writer = LineWriter::new(file);
+    writer.write_all(b"{\n")?;
+
+    let entries: Vec<_> = theme.palette.iter().collect();
+    for (i, (key, value)) in entries.iter().enumerate() {
+        let hex = value.hex();
+        let comma = if i < entries.len() - 1 { "," } else { "" };
+        writer.write_all(format!("    \"{key}\": \"{hex}\"{comma}\n").as_bytes())?;
+    }
+
+    writer.write_all(b"}\n")?;
+
+    Ok(())
+}
+
 fn generate_highlights_file(output: &str, theme: &Theme) -> Result<(), anyhow::Error> {
     let name = &theme.name;
     let background = &theme.background;
@@ -147,7 +171,7 @@ return M\n",
     Ok(())
 }
 
-fn generate_init(output: &str, theme: Theme, overwrite_init: bool) -> Result<(), anyhow::Error> {
+fn generate_init(output: &str, theme: &Theme, overwrite_init: bool) -> Result<(), anyhow::Error> {
     let name = &theme.name;
 
     let file_path = format!("{output}/lua/{name}/init.lua");
