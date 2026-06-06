@@ -13,7 +13,7 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "huevim";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fs.toSource {
     root = ./.;
