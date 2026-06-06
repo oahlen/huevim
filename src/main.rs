@@ -122,7 +122,7 @@ fn generate_palette_json_file(output: &str, theme: &Theme) -> Result<(), anyhow:
     for (i, (key, value)) in entries.iter().enumerate() {
         let hex = value.hex();
         let comma = if i < entries.len() - 1 { "," } else { "" };
-        writer.write_all(format!("    \"{key}\": \"{hex}\"{comma}\n").as_bytes())?;
+        writer.write_all(format!("  \"{key}\": \"{hex}\"{comma}\n").as_bytes())?;
     }
 
     writer.write_all(b"}\n")?;
